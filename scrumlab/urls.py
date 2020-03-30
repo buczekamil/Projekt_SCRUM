@@ -22,6 +22,6 @@ from jedzonko.views import IndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view),
-    path("", IndexView.index1),
+    path("", views.karuzela),
     path('main/', views.dashboard)
 ]
