@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'jedzonko'
+    'jedzonko',
 ]
 
 MIDDLEWARE = [
@@ -72,8 +72,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'scrumlab.wsgi.application'
 
+
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'scrumlab',
+        'HOST': 'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'coderslab'
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -114,9 +127,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-try:
-    from scrumlab.local_settings import DATABASES
-except ModuleNotFoundError:
-    print("Brak konfiguracji bazy danych w pliku local_settings.py!")
-    print("Uzupełnij dane i spróbuj ponownie!")
-    exit(0)
+# try:
+#     from scrumlab.local_settings import DATABASES
+# except ModuleNotFoundError:
+#     print("Brak konfiguracji bazy danych w pliku local_settings.py!")
+#     print("Uzupełnij dane i spróbuj ponownie!")
+#     exit(0)
