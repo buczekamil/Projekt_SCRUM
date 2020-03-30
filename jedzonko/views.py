@@ -45,3 +45,35 @@ class App_recpies(View):
 def Summary_Recipies(request): 
     summary = Recipe.objects.all().count() 
     return render(request, 'dashboard.html', {'summary_recipes':summary})
+
+
+def landing_page(request):
+    return render(request, 'landing_page.html')
+
+
+def recipe_details(request):
+    return render(request, 'app-recipe-details.html')
+
+
+def app_add_recipe(request):
+    return render(request, 'app-add-recipe.html')
+
+
+def app_edit_recipe(request):
+    return render(request, 'app-edit-recipe.html')
+
+
+def app_details_schedules(request):
+    return render(request, 'app-details-schedules.html'),
+
+
+def add_app_add_schedules(request):
+    return render(request, 'app-add-schedules.html')
+
+
+def app_schedules_meal_recipe(request):
+    return render(request, 'app-schedules-meal-recipe.html')
+
+
+def app_schedules(request):
+    return render(request, 'app-schedules.html')
