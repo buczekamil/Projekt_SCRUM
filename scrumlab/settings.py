@@ -72,8 +72,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'scrumlab.wsgi.application'
 
+
+
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'scrumlab',
+        'HOST': 'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'coderslab'
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
