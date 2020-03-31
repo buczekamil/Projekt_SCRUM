@@ -44,7 +44,7 @@ def new_recipe(request):
         ingredients = request.POST["ingredients"]
         preparation_details=request.POST["preparation_details"]
         message = "Wypełnij poprawnie wszystkie pola"
-        if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or preparation_time == 0:
+        if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or int(preparation_time) == 0:
             return render(request, "app-add-recipe.html", {'message': message})
         else:
             Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, preparation_details=preparation_details, ingredients=ingredients, votes=0)
