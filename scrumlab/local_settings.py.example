@@ -1,0 +1,9 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'scrumlab',
+        'HOST': 'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'coderslab'
+    }
+}

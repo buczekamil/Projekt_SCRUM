@@ -1,19 +1,17 @@
 from datetime import datetime
 from random import shuffle
 from typing import List
-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan
-
-from jedzonko.models import Recipe
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+
 
 class IndexView(View):
 
     def get(self, request):
         ctx = {"actual_date": datetime.now()}
-        return render(request, "test.html", ctx)
+        return render(request, "app-recipes.html", ctx)
 
     def index1(request):
         return render(request, 'index.html')
@@ -36,9 +34,7 @@ def karuzela(request):
     recipe3 = recepises[2]
     return render(request, "index.html", {"recipe1": recipe1, "recipe2": recipe2, "recipe3": recipe3})
 
-# def plan_list (request):
-#     plans = Plan.objects.all()
-#     return render(request, "app-schedules.html", {"plans": plans})
+
 
 def plan_list (request):
     plans_list = Plan.objects.all().order_by("name")
@@ -53,4 +49,78 @@ def plan_list (request):
         plans = paginator.page(page)
 
     return render(request, "app-schedules.html", {"plans": plans})
+
+def new_recipe(request):
+    if request.method == "GET":
+        return render(request, "app-add-recipe.html")
+    elif request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+        preparation_time = request.POST["preparation_time"]
+        ingredients = request.POST["ingredients"]
+        preparation_details=request.POST["preparation_details"]
+        message = "Wypełnij poprawnie wszystkie pola"
+        if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or int(preparation_time) == 0:
+            return render(request, "app-add-recipe.html", {'message': message})
+        else:
+            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, preparation_details=preparation_details, ingredients=ingredients, votes=0)
+            return redirect('/recipe/list/')
+
+def new_plan(request):
+    if request.method == "GET":
+        return render(request, "app-add-schedules.html")
+    elif request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+        message = "Wypełnij poprawnie wszystkie pola"
+        if len(name) == 0 or len(description) == 0:
+            return render(request, "app-add-schedules.html", {'message': message})
+        else:
+            Plan.objects.create(name=name, description=description)
+            return redirect('/plan/<INT:id>/details')
+
+
+
+class App_recpies(View):
+
+    def get(self, request):
+        ctx = {"actual_date": datetime.now()}
+        return render(request, "app-recipes.html", ctx)
+
+def Summary_Recipies(request):
+    summary = Recipe.objects.all().count()
+    return render(request, 'dashboard.html', {'summary_recipes':summary})
+
+
+def landing_page(request):
+    return render(request, 'landing_page.html')
+
+
+def recipe_details(request):
+    return render(request, 'app-recipe-details.html')
+
+
+def app_add_recipe(request):
+    return render(request, 'app-add-recipe.html')
+
+
+def app_edit_recipe(request):
+    return render(request, 'app-edit-recipe.html')
+
+
+def app_details_schedules(request):
+    return render(request, 'app-details-schedules.html'),
+
+
+def add_app_add_schedules(request):
+    return render(request, 'app-add-schedules.html')
+
+
+def app_schedules_meal_recipe(request):
+    return render(request, 'app-schedules-meal-recipe.html')
+
+
+def app_schedules(request):
+    return render(request, 'app-schedules.html')
+
 
