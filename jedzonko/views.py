@@ -42,13 +42,13 @@ def new_recipe(request):
         description = request.POST["description"]
         preparation_time = request.POST["preparation_time"]
         ingredients = request.POST["ingredients"]
+        preparation_details=request.POST["preparation_details"]
         message = "Wypełnij poprawnie wszystkie pola"
         if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or preparation_time == 0:
             return render(request, "app-add-recipe.html", {'message': message})
         else:
-            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, ingredients=ingredients, votes=0)
+            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, preparation_details=preparation_details, ingredients=ingredients, votes=0)
             return redirect('/recipe/list/')
-# do przedyskutowania podejscie do sposobu przygotowania w Postgres SQl
 
 def new_plan(request):
     if request.method == "GET":
