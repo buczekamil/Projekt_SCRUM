@@ -1,8 +1,7 @@
 from datetime import datetime
 from random import shuffle
 from typing import List
-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan
 
@@ -35,6 +34,36 @@ def karuzela(request):
     recipe3 = recepises[2]
     return render(request, "index.html", {"recipe1": recipe1, "recipe2": recipe2, "recipe3": recipe3})
 
+def new_recipe(request):
+    if request.method == "GET":
+        return render(request, "app-add-recipe.html")
+    elif request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+        preparation_time = request.POST["preparation_time"]
+        ingredients = request.POST["ingredients"]
+        preparation_details=request.POST["preparation_details"]
+        message = "Wypełnij poprawnie wszystkie pola"
+        if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or preparation_time == 0:
+            return render(request, "app-add-recipe.html", {'message': message})
+        else:
+            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, preparation_details=preparation_details, ingredients=ingredients, votes=0)
+            return redirect('/recipe/list/')
+
+def new_plan(request):
+    if request.method == "GET":
+        return render(request, "app-add-schedules.html")
+    elif request.method == "POST":
+        name = request.POST["name"]
+        description = request.POST["description"]
+        message = "Wypełnij poprawnie wszystkie pola"
+        if len(name) == 0 or len(description) == 0:
+            return render(request, "app-add-schedules.html", {'message': message})
+        else:
+            Plan.objects.create(name=name, description=description)
+            return redirect('/plan/<INT:id>/details')
+
+
 
 class App_recpies(View):
 
@@ -42,8 +71,8 @@ class App_recpies(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
-def Summary_Recipies(request): 
-    summary = Recipe.objects.all().count() 
+def Summary_Recipies(request):
+    summary = Recipe.objects.all().count()
     return render(request, 'dashboard.html', {'summary_recipes':summary})
 
 
@@ -77,3 +106,4 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
+

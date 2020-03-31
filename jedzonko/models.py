@@ -12,7 +12,9 @@ class Recipe (models.Model):
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
     preparation_time = models.IntegerField()
+    preparation_details = models.CharField(max_length=600, default=None)
     votes = models.IntegerField(default=0)
+
 
 class Plan (models.Model):
     name = models.CharField(max_length=64)
