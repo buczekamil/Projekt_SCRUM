@@ -1,6 +1,7 @@
 from datetime import datetime
 from random import shuffle
 from typing import List
+
 from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan
@@ -13,18 +14,16 @@ class IndexView(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
-    def index1(request):
+    def as_view(request):
         return render(request, 'index.html')
 
 
 def dashboard(request):
-    return render(request, "dashboard.html")
-
-
-
-def count_plan(request):
     count_plan = Plan.objects.all().count()
-    return render(request, 'dashboard.html', {'count_plan':count_plan})
+    last_plan = list(Plan.objects.all().order_by('-created'))[0]
+    summary = Recipe.objects.all().count
+    return render(request, 'dashboard.html', {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes':summary})
+
 
 def karuzela(request):
     recepises = list(Recipe.objects.all())
@@ -86,11 +85,6 @@ class App_recpies(View):
     def get(self, request):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
-
-def Summary_Recipies(request):
-    summary = Recipe.objects.all().count()
-    return render(request, 'dashboard.html', {'summary_recipes':summary})
-
 
 def landing_page(request):
     return render(request, 'landing_page.html')
