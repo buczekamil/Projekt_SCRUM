@@ -34,6 +34,10 @@ urlpatterns = [
     path('plan/<int:id>/', views.app_details_schedules),
     path('plan/add/', views.add_app_add_schedules),
     path('plan/add-recepie/', views.app_schedules_meal_recipe),
-    path('plan/list/', views.app_schedules)
+    path('plan/list/', views.app_schedules),
+
+
+    #path('test', views.last_plan)
+
 
 ]

@@ -17,4 +17,4 @@ class Recipe (models.Model):
 class Plan (models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
-
+    created = models.DateField(auto_now_add=True)
