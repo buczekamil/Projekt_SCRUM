@@ -24,6 +24,10 @@ from jedzonko import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view),
+
+    # path("", views.karuzela),
+    # path('main/', views.dashboard),
+    path('plan/list/', views.plan_list),
     path("", views.karuzela), # Karuzela na stronie tytułowej
     path('main/', views.dashboard),
     path('recepie/list/', App_recpies.as_view()),
@@ -34,9 +38,10 @@ urlpatterns = [
     path('plan/<int:id>/', views.app_details_schedules),
     # path('plan/add/', views.add_app_add_schedules),
     path('plan/add-recepie/', views.app_schedules_meal_recipe),
-    path('plan/list/', views.app_schedules),
+    # path('plan/list/', views.app_schedules),
     path('recipe/add/', views.new_recipe),
     path('plan/add/', views.new_plan),
+
 
 
 ]

@@ -4,7 +4,7 @@ from typing import List
 from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan
-
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 
 class IndexView(View):
@@ -33,6 +33,22 @@ def karuzela(request):
     recipe2 = recepises[1]
     recipe3 = recepises[2]
     return render(request, "index.html", {"recipe1": recipe1, "recipe2": recipe2, "recipe3": recipe3})
+
+
+
+def plan_list (request):
+    plans_list = Plan.objects.all().order_by("name")
+    paginator = Paginator(plans_list, 1)
+    try:
+        page = int(request.GET.get('page', '1'))
+    except:
+        page = 1
+    try:
+        plans = paginator.page(page)
+    except(EmptyPage, InvalidPage):
+        plans = paginator.page(page)
+
+    return render(request, "app-schedules.html", {"plans": plans})
 
 def new_recipe(request):
     if request.method == "GET":
@@ -106,4 +122,5 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
+
 
