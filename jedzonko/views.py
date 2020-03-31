@@ -20,9 +20,20 @@ class IndexView(View):
 
 def dashboard(request):
     count_plan = Plan.objects.all().count()
-    last_plan = list(Plan.objects.all().order_by('-created'))[0]
     summary = Recipe.objects.all().count
-    return render(request, 'dashboard.html', {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes':summary})
+
+    last_plan = list(Plan.objects.all().order_by('-created'))[0]
+    recipes = last_plan.recepieplan_set.all()
+
+    recipes_lst = []
+
+    for i in range(1, 8):
+        tmp = recipes.filter(day_name=i)
+        if tmp:
+            recipes_lst.append(tmp.order_by('order'))
+
+    return render(request, 'dashboard.html',
+                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary, 'recipes_lst': recipes_lst})
 
 
 def karuzela(request):
