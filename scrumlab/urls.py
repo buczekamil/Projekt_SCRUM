@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', IndexView.as_view),
     path("", views.karuzela),
-    path('main/', views.dashboard)
+    path('main/', views.dashboard),
+    path('plan/list/', views.plan_list)
 ]
