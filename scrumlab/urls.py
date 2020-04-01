@@ -27,19 +27,20 @@ urlpatterns = [
 
     # path("", views.karuzela),
     # path('main/', views.dashboard),
-    #path('plan/list/', views.plan_list),
+    path('plan/list/', views.plan_list),
     path("", views.karuzela), # Karuzela na stronie tytułowej
     path('main/', views.dashboard),
-    path('recepie/list/', App_recpies.as_view()),
+    path('recipe/list/', App_recpies.as_view()),
     path('', views.landing_page),
-    path('recepie/<int:id>/', views.recipe_details),
+    path('recipe/<int:id>/', views.recipe_details),
     # path('recipe/add/', views.app_add_recipe),
     path('recipe/modify/<int:id>/', views.app_edit_recipe),
     path('plan/<int:id>/', views.app_details_schedules),
     # path('plan/add/', views.add_app_add_schedules),
-    path('plan/add-recepie/', views.app_schedules_meal_recipe),
+    # path('plan/add-recipe/', views.app_schedules_meal_recipe),
+    path('plan/add-recipe/', views.plan_details),
 
-    path('plan/list/', views.app_schedules),
+    # path('plan/list/', views.app_schedules),
 
 
     #path('test', views.last_plan)

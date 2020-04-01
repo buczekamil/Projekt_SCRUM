@@ -26,10 +26,13 @@ class DaysOfWeek(Enum):
     Nie = "Niedziela"
 
 class DayName(models.Model):
-    name = models.CharField(
-        max_length=3, choices=[(tag, tag.value) for tag in DaysOfWeek]
-    )
+    name = models.CharField(max_length=36)
     order = models.IntegerField(unique=True)
+# class DayName(models.Model):
+#     name = models.CharField(
+#         max_length=3, choices=[(tag, tag.value) for tag in DaysOfWeek]
+#     )
+#     order = models.IntegerField(unique=True)
 
 class Plan (models.Model):
     name = models.CharField(max_length=64)
