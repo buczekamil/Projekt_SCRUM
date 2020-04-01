@@ -28,6 +28,11 @@ class DaysOfWeek(Enum):
 class DayName(models.Model):
     name = models.CharField(max_length=36)
     order = models.IntegerField(unique=True)
+# class DayName(models.Model):
+#     name = models.CharField(
+#         max_length=3, choices=[(tag, tag.value) for tag in DaysOfWeek]
+#     )
+#     order = models.IntegerField(unique=True)
 
     def __str__(self):
         return self.id

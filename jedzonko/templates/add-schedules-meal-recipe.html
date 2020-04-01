@@ -1,0 +1,99 @@
+{% extends "__base__.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+    <div class="dashboard-content border-dashed p-3 m-4 view-height">
+        <div class="row border-bottom border-3 p-1 m-1">
+            <div class="col noPadding">
+                <h3 class="color-header text-uppercase">DODAJ PRZEPIS DO PLANU</h3>
+            </div>
+
+        </div>
+        {{ message }}
+        <div class="schedules-content">
+            <form method="post">
+                {% csrf_token %}
+                <div class="col d-flex justify-content-end mb-2">
+                    <button type="submit"
+                            class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">
+                        Zapisz
+                    </button>
+                </div>
+                <div class="form-group row">
+                    <label for="choosePlan"
+                           class="col-sm-2 label-size col-form-label">
+                        Wybierz plan
+                    </label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="choosePlan" name="plan">
+                            <option> -</option>
+                            {% for plan in plans %}
+                                <option>{{ plan.name }}</option>
+                                {#                        <option>2</option>#}
+                                {#                        <option>3</option>#}
+                                {#                        <option>4</option>#}
+                                {#                        <option>5</option>#}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 label-size col-form-label">
+                        Nazwa posiłku
+                    </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" value="" name="meal_name"
+                               placeholder="Nazwa posiłku">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="number" class="col-sm-2 label-size col-form-label">
+                        Numer posiłku
+                    </label>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" value="" name="order"
+                                {#                               id="number"#}
+                               placeholder="Numer posiłku">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="recipie" class="col-sm-2 label-size col-form-label">
+                        Przepis
+                    </label>
+                    <div class="col-sm-4">
+                        {#                    <input type="hidden" value= {{ recipe.id}} name="id">#}
+                        <select class="form-control" name="recipe_name">
+                            <option> -</option>
+                            {% for recipe in recipes %}
+
+                                <option>{{ recipe.name }}</option>
+                                {#                        <option>3</option>#}
+                                {#                        <option>4</option>#}
+                                {#                        <option>5</option>#}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="day" class="col-sm-2 label-size col-form-label">
+                        Dzień
+                    </label>
+                    <div class="col-sm-2">
+                        <select class="form-control" name="day">
+                            <option> -</option>
+                            {% for day in days %}
+                                {#                                <option>{{ day.name }}</option>#}
+                                <option>{{ day.name }}</option>
+                                {#                            <option>wtorek</option>#}
+                                {#                            <option>środa</option>#}
+                                {#                            <option>czwartek</option>#}
+                                {#                            <option>piątek</option>#}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+{#                <input type="submit" value="dodaj">#}
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}
