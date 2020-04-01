@@ -127,7 +127,19 @@ class App_recpies(View):
 
 def as_view(request):
     recipies_list = Recipe.objects.all().order_by("-votes")
-    return render(request, "app-recipes.html", {"recipies": recipies_list})
+    #return render(request, "app-recipes.html", {"recipies": recipies_list})
+    paginator = Paginator(recipies_list, 50)
+    try:
+        page = int(request.GET.get('page', '1'))
+    except:
+        page = 1
+    try:
+        recipies = paginator.page(page)
+    except(EmptyPage, InvalidPage):
+        recipies = paginator.page(page)
+
+    return render(request, "app-recipes.html", {"recipies": recipies})
+
 
 def landing_page(request):
     return render(request, 'landing_page.html')

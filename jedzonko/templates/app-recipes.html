@@ -32,8 +32,8 @@
                 <td class="col-2 d-flex align-items-center justify-content-center flex-wrap">
                     <a href="#"
                        class="btn btn-danger rounded-0 text-light m-1">Usuń</a>
-                    <a href="/recepie/{{ recipe.id }}"
-                       class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
+
+                    <a a type="button" href="recepie/{{recipe.id}}/" class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
                     <a href="/app-edit-recipe.html"
                        class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>
                 </td>
@@ -54,7 +54,7 @@
             <td class="col-2 d-flex align-items-center justify-content-center flex-wrap">
                 <a href="#"
                    class="btn btn-danger rounded-0 text-light m-1">Usuń</a>
-                <a href="/app-recipe-details.html"
+                <a a type="button" href="recepie/{{recipies.id}}/"
                    class="btn btn-info rounded-0 text-light m-1">Szczegóły</a>
                 <a href="/app-edit-recipe.html"
                    class="btn btn-warning rounded-0 text-light m-1">Edytuj</a>
@@ -63,4 +63,26 @@
         </tbody>
     </table>
 </div>
+
+    <div class="prev_next">
+        {% if recipies.has_previous %}
+            <a class="prev btn btn-info" href="?page={{ recipies.previous_page_number }}">Poprzednia</a>
+        {% endif %}
+        <span>
+            {% for pg in recipies.paginator.page_range %}
+                {% if recipies.number == pg %}
+                    <span><a href="?page={{ pg }}" class="btn btn-default">{{ pg }}</a></span>
+                {% else %}
+                    <span><a href="?page={{ pg }}" class="btn">{{ pg }}</a></span>
+                {% endif %}
+            {% endfor %}
+            </span>
+        {% if recipies.has_next %}
+            <a class="next btn btn-info" href="?page={{ recipies.next_page_number }}">Następna</a>
+        {% endif %}
+    </div>
+    <span class="clear_both"></span>
+    </div>
+
+50
 {% endblock content %}
