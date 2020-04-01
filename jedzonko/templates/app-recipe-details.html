@@ -18,7 +18,7 @@
             <tr class="d-flex">
                 <th scope="row" class="col-2">Nazwa Przepisu</th>
                 <td class="col-7">
-                    {% for recipe_detail in recipies %} {{ recipe_detail.name}}
+                    {{ recipe_detail.name}}
                 </td>
             </tr>
             <tr class="d-flex">
@@ -56,7 +56,7 @@
             <ul class="col-5 p-4 list-unstyled">
                         <li>{{recipe_detail.ingredients}}<br></li>
 
-                {% endfor %}
+
             </ul>
         </div>
 
