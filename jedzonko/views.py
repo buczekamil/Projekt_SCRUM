@@ -1,10 +1,11 @@
 from datetime import datetime
 from random import shuffle
 from typing import List
+
 from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan
-
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 
 class IndexView(View):
@@ -13,18 +14,16 @@ class IndexView(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
-    def index1(request):
+    def as_view(request):
         return render(request, 'index.html')
 
 
 def dashboard(request):
-    return render(request, "dashboard.html")
-
-
-
-def count_plan(request):
     count_plan = Plan.objects.all().count()
-    return render(request, 'dashboard.html', {'count_plan':count_plan})
+    last_plan = list(Plan.objects.all().order_by('-created'))[0]
+    summary = Recipe.objects.all().count
+    return render(request, 'dashboard.html', {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes':summary})
+
 
 def karuzela(request):
     recepises = list(Recipe.objects.all())
@@ -33,6 +32,22 @@ def karuzela(request):
     recipe2 = recepises[1]
     recipe3 = recepises[2]
     return render(request, "index.html", {"recipe1": recipe1, "recipe2": recipe2, "recipe3": recipe3})
+
+
+
+def plan_list (request):
+    plans_list = Plan.objects.all().order_by("name")
+    paginator = Paginator(plans_list, 1)
+    try:
+        page = int(request.GET.get('page', '1'))
+    except:
+        page = 1
+    try:
+        plans = paginator.page(page)
+    except(EmptyPage, InvalidPage):
+        plans = paginator.page(page)
+
+    return render(request, "app-schedules.html", {"plans": plans})
 
 def new_recipe(request):
     if request.method == "GET":
@@ -71,11 +86,6 @@ class App_recpies(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
-def Summary_Recipies(request):
-    summary = Recipe.objects.all().count()
-    return render(request, 'dashboard.html', {'summary_recipes':summary})
-
-
 def landing_page(request):
     return render(request, 'landing_page.html')
 
@@ -107,4 +117,5 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
+
 
