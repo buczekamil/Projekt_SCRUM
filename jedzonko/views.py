@@ -10,9 +10,9 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 class IndexView(View):
 
-    def get(self, request):
-        ctx = {"actual_date": datetime.now()}
-        return render(request, "app-recipes.html", ctx)
+    # def get(self, request):
+    #     ctx = {"actual_date": datetime.now()}
+    #     return render(request, "app-recipes.html", ctx)
 
     def as_view(request):
         return render(request, 'index.html')
@@ -20,9 +20,20 @@ class IndexView(View):
 
 def dashboard(request):
     count_plan = Plan.objects.all().count()
-    last_plan = list(Plan.objects.all().order_by('-created'))[0]
     summary = Recipe.objects.all().count
-    return render(request, 'dashboard.html', {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes':summary})
+
+    last_plan = list(Plan.objects.all().order_by('-created'))[0]
+    recipes = last_plan.recepieplan_set.all()
+
+    recipes_lst = []
+
+    for i in range(1, 8):
+        tmp = recipes.filter(day_name=i)
+        if tmp:
+            recipes_lst.append(tmp.order_by('order'))
+
+    return render(request, 'dashboard.html',
+                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary, 'recipes_lst': recipes_lst})
 
 
 def karuzela(request):
@@ -114,12 +125,17 @@ class App_recpies(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
+def as_view(request):
+    recipies_list = Recipe.objects.all().order_by("-votes")
+    return render(request, "app-recipes.html", {"recipies": recipies_list})
+
 def landing_page(request):
     return render(request, 'landing_page.html')
 
 
-def recipe_details(request):
-    return render(request, 'app-recipe-details.html')
+def recipe_details(request, id):
+    recipe_detail = Recipe.objects.get(id=id)
+    return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail})
 
 
 def app_add_recipe(request):
@@ -144,4 +160,5 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
+
 

@@ -34,6 +34,9 @@ class DayName(models.Model):
 #     )
 #     order = models.IntegerField(unique=True)
 
+    def __str__(self):
+        return self.id
+
 class Plan (models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
