@@ -10,9 +10,9 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 class IndexView(View):
 
-    def get(self, request):
-        ctx = {"actual_date": datetime.now()}
-        return render(request, "app-recipes.html", ctx)
+    # def get(self, request):
+    #     ctx = {"actual_date": datetime.now()}
+    #     return render(request, "app-recipes.html", ctx)
 
     def as_view(request):
         return render(request, 'index.html')
@@ -97,6 +97,10 @@ class App_recpies(View):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
+def as_view(request):
+    recipies_list = Recipe.objects.all().order_by("-votes")
+    return render(request, "app-recipes.html", {"recipies": recipies_list})
+
 def landing_page(request):
     return render(request, 'landing_page.html')
 
@@ -127,5 +131,7 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
+
+
 
 
