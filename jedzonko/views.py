@@ -80,8 +80,11 @@ def landing_page(request):
     return render(request, 'landing_page.html')
 
 
-def recipe_details(request):
-    return render(request, 'app-recipe-details.html')
+def recipe_details(request, id):
+    recipe_detail = Recipe.objects.get(id=id)
+    recipe_vote = Recipe.votes
+    return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail},
+                  {'recipe_votes': recipe_vote})
 
 
 def app_add_recipe(request):

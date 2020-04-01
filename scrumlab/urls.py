@@ -37,6 +37,4 @@ urlpatterns = [
     path('plan/list/', views.app_schedules),
     path('recipe/add/', views.new_recipe),
     path('plan/add/', views.new_plan),
-
-
 ]
