@@ -4,15 +4,15 @@ from typing import List
 
 from django.shortcuts import render, redirect
 from django.views import View
-from jedzonko.models import Recipe, Plan
+from jedzonko.models import Recipe, Plan, RecepiePlan, DayName
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 
 class IndexView(View):
 
-    def get(self, request):
-        ctx = {"actual_date": datetime.now()}
-        return render(request, "app-recipes.html", ctx)
+    # def get(self, request):
+    #     ctx = {"actual_date": datetime.now()}
+    #     return render(request, "app-recipes.html", ctx)
 
     def as_view(request):
         return render(request, 'index.html')
@@ -20,10 +20,21 @@ class IndexView(View):
 
 def dashboard(request):
     count_plan = Plan.objects.all().count()
-    last_plan = list(Plan.objects.all().order_by('-created'))[0]
     summary = Recipe.objects.all().count
+
+    last_plan = list(Plan.objects.all().order_by('-created'))[0]
+    recipes = last_plan.recepieplan_set.all()
+
+    recipes_lst = []
+
+    for i in range(1, 8):
+        tmp = recipes.filter(day_name=i)
+        if tmp:
+            recipes_lst.append(tmp.order_by('order'))
+
     return render(request, 'dashboard.html',
-                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary})
+                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary, 'recipes_lst': recipes_lst})
+
 
 
 def karuzela(request):
@@ -81,12 +92,56 @@ def new_plan(request):
             Plan.objects.create(name=name, description=description)
             return redirect('/plan/<INT:id>/details')
 
+def plan_details(request):
+    days = DayName.objects.all()
+    plans = Plan.objects.all()
+    recipes = Recipe.objects.all()
+    if request.method == "GET":
+        return render(request, 'add-schedules-meal-recipe.html', {'plans': plans, 'recipes': recipes, 'days':days})
+    elif request.method == "POST":
+        plan = request.POST["plan"]
+        order = request.POST["order"]
+        meal_name = request.POST["meal_name"]
+        recipe = request.POST["recipe_name"]
+        day = request.POST["day"]
+        message = "Wypełnij poprawnie wszystkie pola"
+        if len (meal_name) == 0 or len(order) == 0:
+            return  render(request, 'add-schedules-meal-recipe.html', {'message':message})
+        else:
+            plan2 = Plan.objects.get(name=plan)
+            plan_id = plan2.id
+            recipe2 = Recipe.objects.get(name=recipe)
+            recipe_id = recipe2.id
+            day2 = DayName.objects.get(name=day)
+            day_id = int(day2.id)
+            RecepiePlan.objects.create(meal_name=meal_name,
+                                       order=order,
+                                       day_name_id=day_id,
+                                       plan_id=plan_id,
+                                       recipe_id=recipe_id)
+            return redirect('/plan/add-recipe/')
 
 class App_recpies(View):
 
     def get(self, request):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
+
+
+def as_view(request):
+    recipies_list = Recipe.objects.all().order_by("-votes")
+    #return render(request, "app-recipes.html", {"recipies": recipies_list})
+    paginator = Paginator(recipies_list, 50)
+    try:
+        page = int(request.GET.get('page', '1'))
+    except:
+        page = 1
+    try:
+        recipies = paginator.page(page)
+    except(EmptyPage, InvalidPage):
+        recipies = paginator.page(page)
+
+    return render(request, "app-recipes.html", {"recipies": recipies})
 
 
 def landing_page(request):

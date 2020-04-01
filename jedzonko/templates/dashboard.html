@@ -16,7 +16,7 @@
                             </a>
                         </div>
                         <div class="menu-item border-dashed">
-                            <a href="plan/add-receipe/">
+                            <a href="plan/add-recipe/">
                                 <i class="far fa-plus-square icon-plus-square"></i>
                                 <span class="title">dodaj przepis do planu</span>
                             </a>
@@ -34,61 +34,60 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="m-4 p-4 border-dashed">
                     <h2 class="dashboard-content-title">
                         <span>Ostatnio dodany plan: {{last_plan.name}}</span>
                     </h2>
-                    <table class="table">
-                        <thead>
-                            <tr class="d-flex">
-                                <th class="col-2">Poniedziałek</th>
-                                <th class="col-8"></th>
-                                <th class="col-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="d-flex">
-                                <td class="col-2">śniadanie</td>
-                                <td class="col-8">płatki owsiane z jagodami i komosą ryżową</td>
-                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
-                            </tr>
-                            <tr class="d-flex">
-                                <td class="col-2">śniadanie</td>
-                                <td class="col-8">kanapka z pastą rybną</td>
-                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
-                            </tr>
-                            <tr class="d-flex">
-                                <td class="col-2">obiad</td>
-                                <td class="col-8">zupa pomidorowa</td>
-                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table">
-                        <thead>
-                            <tr class="d-flex">
-                                <th class="col-2">Wtorek</th>
-                                <th class="col-8"></th>
-                                <th class="col-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="d-flex">
-                                <td class="col-2">śniadanie</td>
-                                <td class="col-8">płatki owsiane z jagodami i komosą ryżową</td>
-                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
-                            </tr>
-                            <tr class="d-flex">
-                                <td class="col-2">drugie śniadanie</td>
-                                <td class="col-8">pączki</td>
-                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
-                            </tr>
-                            <tr class="d-flex">
-                                <td class="col-2">obiad</td>
-                                <td class="col-8">schabowy w panierce</td>
-                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {% for recipes in recipes_lst %}
+                        <table class="table">
+                            <thead>
+                                <tr class="d-flex">
+                                    <th class="col-2"> {{recipes.0.day_name.name}}</th>
+                                    <th class="col-8"></th>
+                                    <th class="col-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for recipe in recipes %}
+                                    <tr class="d-flex">
+                                        <td class="col-2">{{recipe.meal_name}}</td>
+                                        <td class="col-8">{{ recipe.recipe.name }}</td>
+                                        <td class="col-2">
+                                            <a type="button" href="{{ recipe.recipe.get_url }}" class="btn btn-primary rounded-0">Szczegóły</a></td>
+                                    </tr>
+                                    {% endfor %}
+
+                            </tbody>
+                        </table>
+                    {% endfor %}
+
+
+{#                    <table class="table">#}
+{#                        <thead>#}
+{#                            <tr class="d-flex">#}
+{#                                <th class="col-2">Wtorek</th>#}
+{#                                <th class="col-8"></th>#}
+{#                                <th class="col-2"></th>#}
+{#                            </tr>#}
+{#                        </thead>#}
+{#                        <tbody>#}
+{#                            <tr class="d-flex">#}
+{#                                <td class="col-2">śniadanie</td>#}
+{#                                <td class="col-8">płatki owsiane z jagodami i komosą ryżową</td>#}
+{#                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>#}
+{#                            </tr>#}
+{#                            <tr class="d-flex">#}
+{#                                <td class="col-2">drugie śniadanie</td>#}
+{#                                <td class="col-8">pączki</td>#}
+{#                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>#}
+{#                            </tr>#}
+{#                            <tr class="d-flex">#}
+{#                                <td class="col-2">obiad</td>#}
+{#                                <td class="col-8">schabowy w panierce</td>#}
+{#                                <td class="col-2"><button type="button" class="btn btn-primary rounded-0">Szczegóły</button></td>#}
+{#                            </tr>#}
+{#                        </tbody>#}
+{#                    </table>#}
                 </div>
 {% endblock content %}
