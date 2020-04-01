@@ -34,7 +34,7 @@ class DayName(models.Model):
 class Plan (models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
-    created = models.DateField()
+    created = models.DateField(auto_now_add=True)
     recepies = models.ManyToManyField('Recipe', through='RecepiePlan')
 
     def __str__(self):
@@ -46,3 +46,4 @@ class RecepiePlan(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     order = models.IntegerField(unique=True)
     day_name = models.ForeignKey('DayName', on_delete=models.CASCADE)
+
