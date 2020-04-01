@@ -22,7 +22,8 @@ def dashboard(request):
     count_plan = Plan.objects.all().count()
     last_plan = list(Plan.objects.all().order_by('-created'))[0]
     summary = Recipe.objects.all().count
-    return render(request, 'dashboard.html', {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes':summary})
+    return render(request, 'dashboard.html',
+                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary})
 
 
 def karuzela(request):
@@ -34,8 +35,7 @@ def karuzela(request):
     return render(request, "index.html", {"recipe1": recipe1, "recipe2": recipe2, "recipe3": recipe3})
 
 
-
-def plan_list (request):
+def plan_list(request):
     plans_list = Plan.objects.all().order_by("name")
     paginator = Paginator(plans_list, 1)
     try:
@@ -49,6 +49,7 @@ def plan_list (request):
 
     return render(request, "app-schedules.html", {"plans": plans})
 
+
 def new_recipe(request):
     if request.method == "GET":
         return render(request, "app-add-recipe.html")
@@ -57,13 +58,15 @@ def new_recipe(request):
         description = request.POST["description"]
         preparation_time = request.POST["preparation_time"]
         ingredients = request.POST["ingredients"]
-        preparation_details=request.POST["preparation_details"]
+        preparation_details = request.POST["preparation_details"]
         message = "Wypełnij poprawnie wszystkie pola"
         if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or int(preparation_time) == 0:
             return render(request, "app-add-recipe.html", {'message': message})
         else:
-            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, preparation_details=preparation_details, ingredients=ingredients, votes=0)
+            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time,
+                                  preparation_details=preparation_details, ingredients=ingredients, votes=0)
             return redirect('/recipe/list/')
+
 
 def new_plan(request):
     if request.method == "GET":
@@ -79,12 +82,12 @@ def new_plan(request):
             return redirect('/plan/<INT:id>/details')
 
 
-
 class App_recpies(View):
 
     def get(self, request):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
+
 
 def landing_page(request):
     return render(request, 'landing_page.html')
@@ -92,7 +95,12 @@ def landing_page(request):
 
 def recipe_details(request, id):
     recipe_detail = Recipe.objects.get(id=id)
-    return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail})
+    if request.method == "GET":
+        return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail})
+    elif request.method == "POST":
+        vote_add_1 = int(recipe_detail.votes) + 1
+        Recipe.objects.filter(id=id).update(votes=vote_add_1)
+        return redirect(f'/recipe/{id}/')
 
 
 def app_add_recipe(request):
@@ -117,5 +125,3 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
-
-
