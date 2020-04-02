@@ -39,6 +39,7 @@ def dashboard(request):
 
 
 
+
 def karuzela(request):
     recepises = list(Recipe.objects.all())
     shuffle(recepises)
