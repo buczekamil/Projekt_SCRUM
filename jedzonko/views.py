@@ -38,6 +38,7 @@ def dashboard(request):
                    'recipes_lst': recipes_lst})
 
 
+
 def karuzela(request):
     recepises = list(Recipe.objects.all())
     shuffle(recepises)
@@ -49,7 +50,7 @@ def karuzela(request):
 
 def plan_list(request):
     plans_list = Plan.objects.all().order_by("name")
-    paginator = Paginator(plans_list, 1)
+    paginator = Paginator(plans_list, 50)
     try:
         page = int(request.GET.get('page', '1'))
     except:
@@ -110,7 +111,6 @@ def plan_details(request):
         if len(meal_name) == 0 or len(order) == 0:
             return render(request, 'add-schedules-meal-recipe.html', {'message': message})
         else:
-
             plan2 = Plan.objects.get(name=plan)
             plan_id = plan2.id
             recipe2 = Recipe.objects.get(name=recipe)
@@ -182,7 +182,12 @@ def landing_page(request):
 
 def recipe_details(request, id):
     recipe_detail = Recipe.objects.get(id=id)
-    return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail})
+    if request.method == "GET":
+        return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail})
+    elif request.method == "POST":
+        vote_add_1 = int(recipe_detail.votes) + 1
+        Recipe.objects.filter(id=id).update(votes=vote_add_1)
+        return redirect(f'/recipe/{id}/')
 
 
 def app_add_recipe(request):
@@ -193,8 +198,11 @@ def app_edit_recipe(request):
     return render(request, 'app-edit-recipe.html')
 
 
-def app_details_schedules(request):
-    return render(request, 'app-details-schedules.html'),
+def app_details_schedules(request, id):
+    schedule_detail = RecepiePlan.objects.get(id=id)
+    return render(request, 'app-details-schedules.html', {'schedule_detail': schedule_detail})
+
+
 
 
 def add_app_add_schedules(request):
