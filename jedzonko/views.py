@@ -166,8 +166,15 @@ def app_edit_recipe(request):
     return render(request, 'app-edit-recipe.html')
 
 
-def app_details_schedules(request):
-    return render(request, 'app-details-schedules.html'),
+def app_details_schedules(request, id):
+    schedule_detail = RecepiePlan.objects.get(id=id)
+    if request.method == "GET":
+        return render(request, 'app-details-schedules.html', {'schedule_detail': schedule_detail})
+    elif request.method == "POST":
+        # vote_add_1 = int(recipe_detail.votes) + 1
+        # Recipe.objects.filter(id=id).update(votes=vote_add_1)
+        return redirect(f'/plan/{id}/')
+
 
 
 def add_app_add_schedules(request):
