@@ -2,7 +2,9 @@
 {% block title %}{% endblock title %}
 {% block content %}
 <div class="dashboard-content border-dashed p-3 m-4 view-height">
-
+    <form method="POST">
+    {% csrf_token %}
+    <input name="id" type="hidden">{{ recipe.id }}
     <div class="mt-4 ml-4 mr-4">
         <div class="row border-bottom border-3">
             <div class="col"><h3 class="color-header text-uppercase">Edycja
@@ -20,18 +22,26 @@
             <tr class="d-flex">
                 <th scope="row" class="col-2">Nazwa Przepisu</th>
                 <td class="col-7">
-                    <input class="w-100 p-1" value="z ziemniakami i brukselką">
+                    {% for recipe in recipes %}
+
+                        <textarea class="w-100 p-1" value="" name="name">{{recipe.name}}</textarea>
+
+                    {% endfor %}
                 </td>
             </tr>
             <tr class="d-flex">
                 <th scope="row" class="col-2">Opis przepisu</th>
-                <td class="col-7"><textarea class="w-100 p-1" rows="5">Mamusina najlepsza zapiekanka pod słońcem. Można ją podać jako główne danie albo jako kolację. W zapiekance możesz użyć również kiełbasy paprykowej sprawi ona, że zapiekanka będzie ostrzejsza w smaku. Zgodnie z zalecanimi Makłowicza, podawać z dobrze dobranym winkiem ;)</textarea>
+                {% for recipe in recipes %}
+                <td class="col-7"><textarea class="w-100 p-1" rows="5" name="description">{{ recipe.description }}</textarea>
+                    {% endfor %}
                 </td>
             </tr>
             <tr class="d-flex">
-                <th scope="row" class="col-2">Przygotowani(minuty)</th>
+                <th scope="row" class="col-2">Przygotowanie(minuty)</th>
                 <td class="col-3">
-                    <input class="p-1" type="number" value="45">
+                    {% for recipe in recipes %}
+                    <input class="p-1" type="number" value={{ recipe.preparation_time }} name="preparation_time">
+                    {% endfor %}
                 </td>
             </tr>
             </tbody>
@@ -46,24 +56,20 @@
         </div>
         <div class="row d-flex">
             <div class="col-5 p-4">
-                <textarea class="w-100 p-1" rows="10">Po tym czasie ziemniaki zalej śmietaną wymieszaną z Knorr Naturalnie smaczne, dodaj liście brukselki i dokładnie wymieszaj.</textarea>
+                {% for recipe in recipes %}
+                <textarea class="w-100 p-1" rows="10" name="preparation_details">{{ recipe.preparation_details }}</textarea>
+                {% endfor %}
             </div>
             <div class="col-2"></div>
 
             <div class="col-5 p-4">
-                                    <textarea class="w-100 p-1" rows="10">
-    brukselka 300g
-    ziemniaki 500g                             
-    Fix Naturalnie makaronowa z szynką Knorr 1 szt.                              
-    średnia cebula 1szt.                                
-    ząbek czosnku 1szt.                              
-    kiełbasa np. śląska 500g                               
-    śmietana 18% 200 ml
-    Rama Smaż jak szef kuchni, wariant klasyczny 4 łyżki
-    gałązka tymianku 1 szt.
-                                    </textarea>
+                {% for recipe in recipes %}
+                                    <textarea class="w-100 p-1" rows="10" name="ingredients">{{ recipe.ingredients }}</textarea>
+                {% endfor %}
             </div>
         </div>
     </div>
+
+    </form>
 </div>
 {% endblock content %}

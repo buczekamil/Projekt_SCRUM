@@ -1,7 +1,8 @@
 from datetime import datetime
 from random import shuffle
+from django.http import Http404
 from typing import List
-
+import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe, Plan, RecepiePlan, DayName
@@ -33,7 +34,8 @@ def dashboard(request):
             recipes_lst.append(tmp.order_by('order'))
 
     return render(request, 'dashboard.html',
-                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary, 'recipes_lst': recipes_lst})
+                  {'count_plan': count_plan, 'last_plan': last_plan, 'summary_recipes': summary,
+                   'recipes_lst': recipes_lst})
 
 
 def karuzela(request):
@@ -45,8 +47,7 @@ def karuzela(request):
     return render(request, "index.html", {"recipe1": recipe1, "recipe2": recipe2, "recipe3": recipe3})
 
 
-
-def plan_list (request):
+def plan_list(request):
     plans_list = Plan.objects.all().order_by("name")
     paginator = Paginator(plans_list, 1)
     try:
@@ -60,6 +61,7 @@ def plan_list (request):
 
     return render(request, "app-schedules.html", {"plans": plans})
 
+
 def new_recipe(request):
     if request.method == "GET":
         return render(request, "app-add-recipe.html")
@@ -68,13 +70,15 @@ def new_recipe(request):
         description = request.POST["description"]
         preparation_time = request.POST["preparation_time"]
         ingredients = request.POST["ingredients"]
-        preparation_details=request.POST["preparation_details"]
+        preparation_details = request.POST["preparation_details"]
         message = "Wypełnij poprawnie wszystkie pola"
         if len(name) == 0 or len(description) == 0 or len(ingredients) == 0 or int(preparation_time) == 0:
             return render(request, "app-add-recipe.html", {'message': message})
         else:
-            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time, preparation_details=preparation_details, ingredients=ingredients, votes=0)
+            Recipe.objects.create(name=name, description=description, preparation_time=preparation_time,
+                                  preparation_details=preparation_details, ingredients=ingredients, votes=0)
             return redirect('/recipe/list/')
+
 
 def new_plan(request):
     if request.method == "GET":
@@ -89,12 +93,13 @@ def new_plan(request):
             Plan.objects.create(name=name, description=description)
             return redirect('/plan/<INT:id>/details')
 
+
 def plan_details(request):
     days = DayName.objects.all()
     plans = Plan.objects.all()
     recipes = Recipe.objects.all()
     if request.method == "GET":
-        return render(request, 'add-schedules-meal-recipe.html', {'plans': plans, 'recipes': recipes, 'days':days})
+        return render(request, 'add-schedules-meal-recipe.html', {'plans': plans, 'recipes': recipes, 'days': days})
     elif request.method == "POST":
         plan = request.POST["plan"]
         order = request.POST["order"]
@@ -102,8 +107,8 @@ def plan_details(request):
         recipe = request.POST["recipe_name"]
         day = request.POST["day"]
         message = "Wypełnij poprawnie wszystkie pola"
-        if len (meal_name) == 0 or len(order) == 0:
-            return  render(request, 'add-schedules-meal-recipe.html', {'message':message})
+        if len(meal_name) == 0 or len(order) == 0:
+            return render(request, 'add-schedules-meal-recipe.html', {'message': message})
         else:
 
             plan2 = Plan.objects.get(name=plan)
@@ -119,15 +124,45 @@ def plan_details(request):
                                        recipe_id=recipe_id)
             return redirect('/plan/add-recipe/')
 
+
+def recipe_modify(request, id):
+    id = id
+    if request.method == "GET":
+        try:
+            recipe = Recipe.objects.get(id=id)
+            return render(request, "app-edit-recipe.html", {'recipes':[recipe]})
+        except Recipe.DoesNotExist:
+            raise Http404
+    elif request.method == "POST":
+        name = request.POST["name"]
+        preparation_time = request.POST["preparation_time"]
+        ingredients = request.POST["ingredients"]
+        description = request.POST["description"]
+        updated_date = datetime.date.today()
+        preparation_details = request.POST["preparation_details"]
+        # id = request.POST.get("id")
+        Recipe.objects.filter(id=id).update(name=name,
+                                            preparation_time=preparation_time,
+                                            ingredients=ingredients,
+                                            description=description,
+                                            updated=updated_date,
+                                            preparation_details=preparation_details)
+        return redirect(f"/recipe/modify/{id}")
+
+
+
+
+
 class App_recpies(View):
 
     def get(self, request):
         ctx = {"actual_date": datetime.now()}
         return render(request, "app-recipes.html", ctx)
 
+
 def as_view(request):
     recipies_list = Recipe.objects.all().order_by("-votes")
-    #return render(request, "app-recipes.html", {"recipies": recipies_list})
+    # return render(request, "app-recipes.html", {"recipies": recipies_list})
     paginator = Paginator(recipies_list, 50)
     try:
         page = int(request.GET.get('page', '1'))
@@ -172,5 +207,3 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
-
-
