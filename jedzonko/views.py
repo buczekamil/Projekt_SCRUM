@@ -48,7 +48,7 @@ def karuzela(request):
 
 def plan_list(request):
     plans_list = Plan.objects.all().order_by("name")
-    paginator = Paginator(plans_list, 1)
+    paginator = Paginator(plans_list, 50)
     try:
         page = int(request.GET.get('page', '1'))
     except:
@@ -168,12 +168,8 @@ def app_edit_recipe(request):
 
 def app_details_schedules(request, id):
     schedule_detail = RecepiePlan.objects.get(id=id)
-    if request.method == "GET":
-        return render(request, 'app-details-schedules.html', {'schedule_detail': schedule_detail})
-    elif request.method == "POST":
-        # vote_add_1 = int(recipe_detail.votes) + 1
-        # Recipe.objects.filter(id=id).update(votes=vote_add_1)
-        return redirect(f'/plan/{id}/')
+    return render(request, 'app-details-schedules.html', {'schedule_detail': schedule_detail})
+
 
 
 
