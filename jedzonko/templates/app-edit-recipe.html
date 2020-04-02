@@ -2,8 +2,10 @@
 {% block title %}{% endblock title %}
 {% block content %}
 <div class="dashboard-content border-dashed p-3 m-4 view-height">
+
     <form method="POST">
-    {% csrf_token %}
+        {{ message }}
+        {% csrf_token %}
     <input name="id" type="hidden">{{ recipe.id }}
     <div class="mt-4 ml-4 mr-4">
         <div class="row border-bottom border-3">

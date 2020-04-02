@@ -1,6 +1,6 @@
 from datetime import datetime
 from random import shuffle
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from typing import List
 import datetime
 from django.shortcuts import render, redirect
@@ -93,7 +93,7 @@ def new_plan(request):
             return render(request, "app-add-schedules.html", {'message': message})
         else:
             Plan.objects.create(name=name, description=description)
-            return redirect('/plan/<INT:id>/details')
+            return redirect(f"/plan/{id}/")
 
 
 def plan_details(request):
@@ -141,14 +141,22 @@ def recipe_modify(request, id):
         description = request.POST["description"]
         updated_date = datetime.date.today()
         preparation_details = request.POST["preparation_details"]
+
         # id = request.POST.get("id")
-        Recipe.objects.filter(id=id).update(name=name,
-                                            preparation_time=preparation_time,
-                                            ingredients=ingredients,
-                                            description=description,
-                                            updated=updated_date,
-                                            preparation_details=preparation_details)
-        return redirect(f"/recipe/modify/{id}")
+        message = "Wypełnij poprawnie wszystkie pola"
+        recipe = Recipe.objects.get(id=id)
+        if len(name) ==0 or len(ingredients) ==0 or len(description) ==0 or len(preparation_details) ==0 or int(preparation_time) ==0:
+
+            return render(request, 'app-edit-recipe.html', {'message':message, 'recipes':[recipe]})
+        else:
+            Recipe.objects.filter(id=id).update(name=name,
+                                                preparation_time=preparation_time,
+                                                ingredients=ingredients,
+                                                description=description,
+                                                updated=updated_date,
+                                                preparation_details=preparation_details)
+            return redirect(f"/recipe/modify/{id}")
+
 
 
 
@@ -196,7 +204,9 @@ def app_add_recipe(request):
 
 
 def app_edit_recipe(request):
-    return render(request, 'app-edit-recipe.html')
+    return render(request, 'app-add-recipe.html')
+
+
 
 
 def app_details_schedules(request, id):
