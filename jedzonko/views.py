@@ -38,8 +38,6 @@ def dashboard(request):
                    'recipes_lst': recipes_lst})
 
 
-
-
 def karuzela(request):
     recepises = list(Recipe.objects.all())
     shuffle(recepises)
@@ -131,7 +129,7 @@ def recipe_modify(request, id):
     if request.method == "GET":
         try:
             recipe = Recipe.objects.get(id=id)
-            return render(request, "app-edit-recipe.html", {'recipes':[recipe]})
+            return render(request, "app-edit-recipe.html", {'recipes': [recipe]})
         except Recipe.DoesNotExist:
             raise Http404
     elif request.method == "POST":
@@ -156,9 +154,6 @@ def recipe_modify(request, id):
                                                 updated=updated_date,
                                                 preparation_details=preparation_details)
             return redirect(f"/recipe/modify/{id}")
-
-
-
 
 
 
@@ -193,10 +188,19 @@ def recipe_details(request, id):
     recipe_detail = Recipe.objects.get(id=id)
     if request.method == "GET":
         return render(request, 'app-recipe-details.html', {'recipe_detail': recipe_detail})
-    elif request.method == "POST":
+    elif request.method == "POST" and str(request.POST.get("like")):
         vote_add_1 = int(recipe_detail.votes) + 1
         Recipe.objects.filter(id=id).update(votes=vote_add_1)
         return redirect(f'/recipe/{id}/')
+    else:
+        votes = recipe_detail.votes
+        vote_add_1 = int(votes - 1)
+        if vote_add_1 >0 :
+            Recipe.objects.filter(id=id).update(votes=vote_add_1)
+            return redirect(f'/recipe/{id}/')
+        else:
+            Recipe.objects.filter(id=id).update(votes=0)
+            return redirect(f'/recipe/{id}/')
 
 
 def app_add_recipe(request):
@@ -212,8 +216,6 @@ def app_edit_recipe(request):
 def app_details_schedules(request, id):
     schedule_detail = RecepiePlan.objects.get(id=id)
     return render(request, 'app-details-schedules.html', {'schedule_detail': schedule_detail})
-
-
 
 
 def add_app_add_schedules(request):
