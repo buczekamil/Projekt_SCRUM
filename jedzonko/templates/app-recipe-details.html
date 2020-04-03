@@ -1,65 +1,93 @@
 {% extends "__base__.html" %}
 {% block title %}{% endblock %}
 {% block content %}
-<div class="dashboard-content border-dashed p-3 m-4 view-height">
-
-    <div class="mt-4 ml-4 mr-4">
-        <div class="row border-bottom border-3">
-            <div class="col"><h3 class="color-header text-uppercase">Szczegóły
-                przepisu</h3></div>
-            <div class="col d-flex justify-content-end mb-2"><a
-                    href="/app-recipes.html"
-                    class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
-            </div>
-        </div>
-
-        <table class="table borderless">
-            <tbody>
-            <tr class="d-flex">
-                <th scope="row" class="col-2">Nazwa Przepisu</th>
-                <td class="col-7">
-                    {{ recipe_detail.name}}
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <th scope="row" class="col-2">Opis przepisu</th>
-                <td class="col-7">{{ recipe_detail.description}}
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <th scope="row" class="col-2">Przygotowanie (minuty)</th>
-                <td class="col-7">
-                    {{recipe_detail.preparation_time}}
-                </td>
-            </tr>
-             <tr class="d-flex">
-                <th scope="row" class="col-2">Liczba polubień</th>
-                <td class="col-7">
-                    {{recipe_detail.votes}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <div class="row d-flex">
-            <div class="col-5 border-bottom border-3"><h3
-                    class="text-uppercase">Sposób przygotowania</h3></div>
-            <div class="col-2"></div>
-            <div class="col-5 border-bottom border-3"><h3
-                    class="text-uppercase">Składniki</h3></div>
-        </div>
-        <div class="row d-flex">
-            <div class="col-5 p-4">
-                <p>{{ recipe_detail.preparation_details}}</p>
-            </div>
-            <div class="col-2"></div>
-            <ul class="col-5 p-4 list-unstyled">
-                        <li>{{recipe_detail.ingredients}}<br></li>
-
-
-            </ul>
-        </div>
-
+    <form id="likebutton" method="POST"
+    ">
+    {% csrf_token %}
+    <input type="hidden" value={{ recipe_detail.id }}>
+    <div align="right">
+        <button style="font-size: 10px; width: 60px; color: #EAEAEA; background-color: indianred"
+                type="submit" value="" name="like">Dislike
+        </button>
     </div>
-</div>
+    </form>
+    <form id="dislikebutton" method="POST"
+    ">
+    {% csrf_token %}
+    <input type="hidden" value={{ recipe_detail.id }}>
+    <div align="right">
+        <button style="font-size: 10px; width: 60px ;color: #EAEAEA; background-color: steelblue"
+                type="submit"
+                value="" name="dislike">Like
+        </button>
+    </div>
+    </form>
+
+    <div class="dashboard-content border-dashed p-3 m-4 view-height">
+        <div class="mt-4 ml-4 mr-4">
+            <div class="row border-bottom border-3">
+                <div class="col"><h3 class="color-header text-uppercase">Szczegóły
+                    przepisu</h3></div>
+                <div class="col d-flex justify-content-end mb-2">
+                    <a
+                            href="/plan/add-recipe/"
+                            class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj przepis do planu</a>
+                    <a
+                            href="/recipe/list/"
+                    class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
+
+                </div>
+            </div>
+
+
+            <table class="table borderless">
+                <tbody>
+                <tr class="d-flex">
+                    <th scope="row" class="col-2">Nazwa Przepisu</th>
+                    <td class="col-7">
+                        {{ recipe_detail.name }}
+                    </td>
+                </tr>
+                <tr class="d-flex">
+                    <th scope="row" class="col-2">Opis przepisu</th>
+                    <td class="col-7">{{ recipe_detail.description }}
+                    </td>
+                </tr>
+                <tr class="d-flex">
+                    <th scope="row" class="col-2">Przygotowanie (minuty)</th>
+                    <td class="col-7">
+                        {{ recipe_detail.preparation_time }}
+                    </td>
+                </tr>
+                <tr class="d-flex">
+                    <th scope="row" class="col-2">Liczba polubień</th>
+                    <td class="col-7">
+
+                        <object name="votes">{{ recipe_detail.votes }}</object>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row d-flex">
+                <div class="col-5 border-bottom border-3"><h3
+                        class="text-uppercase">Sposób przygotowania</h3></div>
+                <div class="col-2"></div>
+                <div class="col-5 border-bottom border-3"><h3
+                        class="text-uppercase">Składniki</h3></div>
+            </div>
+            <div class="row d-flex">
+                <div class="col-5 p-4">
+                    <p><br>{{ recipe_detail.preparation_details }}</p>
+                </div>
+                <div class="col-2"></div>
+                <ul class="col-5 p-4 list-unstyled">
+                    <li>{{ recipe_detail.ingredients }}<br></li>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}

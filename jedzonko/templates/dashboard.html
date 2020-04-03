@@ -16,7 +16,7 @@
                             </a>
                         </div>
                         <div class="menu-item border-dashed">
-                            <a href="plan/add-recipe/">
+                            <a href="/plan/add-recipe/">
                                 <i class="far fa-plus-square icon-plus-square"></i>
                                 <span class="title">dodaj przepis do planu</span>
                             </a>
@@ -54,7 +54,7 @@
                                         <td class="col-2">{{recipe.meal_name}}</td>
                                         <td class="col-8">{{ recipe.recipe.name }}</td>
                                         <td class="col-2">
-                                            <a type="button" href="{{ recipe.recipe.get_url }}" class="btn btn-primary rounded-0">Szczegóły</a></td>
+                                            <a type="button" href="/recipe/{{recipe.id}}" class="btn btn-primary rounded-0">Szczegóły</a></td>
                                     </tr>
                                     {% endfor %}
 
