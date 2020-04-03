@@ -39,11 +39,12 @@
                 <tr class="d-flex">
                     <th scope="row" class="col-2">Liczba polubień</th>
                     <td class="col-7">
-                        <object name="votes">{{ recipe_detail.votes }}</object> <form id="likebutton" method="POST"">
+                        <object name="votes">{{ recipe_detail.votes }}</object>
+                        <form id="likebutton" method="POST">
                         {% csrf_token %}
                         <input type="hidden" value= {{ recipe_detail.id}} name="id">
                     <div>
-                        <button style="font-size: 10px; color: #EAEAEA; background-color: steelblue" type="submit" value="">Polub przepis</button>
+{#                        <button style="font-size: 10px; color: #EAEAEA; background-color: steelblue" type="submit" value="">Polub przepis</button>#}
                     </div>
                     </form>
                     </td>
@@ -63,11 +64,11 @@
             </div>
             <div class="row d-flex">
                 <div class="col-5 p-4">
-                    <p>{{ recipe_detail.preparation_details }}</p>
+                    <p><br>{{ recipe_detail.preparation_details }}</p>
                 </div>
                 <div class="col-2"></div>
                 <ul class="col-5 p-4 list-unstyled">
-                    <li>{{ recipe_detail.ingredients }}<br></li>
+                    <li><br>{{ recipe_detail.ingredients }}<br></li>
 
 
                 </ul>
@@ -75,4 +76,5 @@
 
         </div>
     </div>
+
 {% endblock content %}
