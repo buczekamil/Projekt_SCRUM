@@ -183,3 +183,9 @@ def app_schedules_meal_recipe(request):
 
 def app_schedules(request):
     return render(request, 'app-schedules.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+
+def about(request):
+    return render(request, 'about.html')
