@@ -37,8 +37,8 @@ urlpatterns = [
 
     # path('recepie/list/', App_recpies.as_view),
 
-    path('recipie/list/', views.as_view),
-    path('recipie/<int:id>/', views.recipe_details),
+    path('recipe/list/', views.as_view),
+    path('recipe/<int:id>/', views.recipe_details),
 
 
     # path('recipe/add/', views.app_add_recipe),

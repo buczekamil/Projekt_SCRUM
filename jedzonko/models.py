@@ -53,3 +53,7 @@ class RecepiePlan(models.Model):
     order = models.IntegerField(unique=True)
     day_name = models.ForeignKey('DayName', on_delete=models.CASCADE)
 
+class Page(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField(max_length=1000)
+    slug = models.SlugField(max_length=40)
