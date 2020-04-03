@@ -23,7 +23,7 @@ def dashboard(request):
     count_plan = Plan.objects.all().count()
     summary = Recipe.objects.all().count
 
-    last_plan = list(Plan.objects.all().order_by('-created'))[0]
+    last_plan = list(Plan.objects.all().order_by('created'))[-1]
     recipes = last_plan.recepieplan_set.all()
 
     recipes_lst = []
@@ -85,13 +85,14 @@ def new_plan(request):
         return render(request, "app-add-schedules.html")
     elif request.method == "POST":
         name = request.POST["name"]
+        id = request.POST.get("id")
         description = request.POST["description"]
         message = "Wypełnij poprawnie wszystkie pola"
         if len(name) == 0 or len(description) == 0:
             return render(request, "app-add-schedules.html", {'message': message})
         else:
             Plan.objects.create(name=name, description=description)
-            return redirect(f"/plan/{id}/")
+            return redirect(f"/plan/list/")
 
 
 def plan_details(request):
