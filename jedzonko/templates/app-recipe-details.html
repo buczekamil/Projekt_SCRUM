@@ -33,7 +33,7 @@
                             href="/plan/add-recipe/"
                             class="btn btn-success rounded-0 pt-0 pb-0 pr-4 pl-4">Dodaj przepis do planu</a>
                     <a
-                            href="/recipe/list/""
+                            href="/recipe/list/"
                     class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
 
                 </div>
@@ -62,7 +62,8 @@
                 <tr class="d-flex">
                     <th scope="row" class="col-2">Liczba polubień</th>
                     <td class="col-7">
-                        {{ recipe_detail.votes }}
+
+                        <object name="votes">{{ recipe_detail.votes }}</object>
                     </td>
                 </tr>
                 </tbody>
@@ -76,13 +77,17 @@
             </div>
             <div class="row d-flex">
                 <div class="col-5 p-4">
-                    <p>{{ recipe_detail.preparation_details }}</p>
+                    <p><br>{{ recipe_detail.preparation_details }}</p>
                 </div>
                 <div class="col-2"></div>
                 <ul class="col-5 p-4 list-unstyled">
                     <li>{{ recipe_detail.ingredients }}<br></li>
+
+
+
                 </ul>
             </div>
         </div>
     </div>
+
 {% endblock content %}
