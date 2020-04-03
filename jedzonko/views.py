@@ -146,8 +146,25 @@ def app_edit_recipe(request):
     return render(request, 'app-edit-recipe.html')
 
 
-def app_details_schedules(request):
-    return render(request, 'app-details-schedules.html'),
+def app_details_schedules(request, id):
+    plan = Plan.objects.get(id=id)
+    recipes = plan.recepieplan_set.all()
+    recipes_lst = []
+    for i in range(1, 8):
+        tmp = recipes.filter(day_name=i)
+        if tmp:
+            recipes_lst.append(tmp.order_by('order'))
+    if request.method == 'POST':
+        meal_id = request.POST['id']
+        RecepiePlan.objects.get(id=meal_id).delete()
+        #p1.remove()
+        #id=request.POST['id']
+        # RecepiePlan.objects.filter(pk=id).delete(id=id)
+        return render(request, 'app-details-schedules.html',
+                      {'plan': plan, 'recipes_lst': recipes_lst})
+    else:
+        return render(request, 'app-details-schedules.html',
+                       {'plan': plan, 'recipes_lst': recipes_lst})
 
 
 def add_app_add_schedules(request):

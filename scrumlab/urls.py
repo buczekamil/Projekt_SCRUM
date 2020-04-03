@@ -36,8 +36,8 @@ urlpatterns = [
     # path('', views.landing_page),
 
     # path('recepie/list/', App_recpies.as_view),
-    path('recepie/list/', views.as_view),
-    path('recepie/<int:id>/', views.recipe_details),
+    path('recipie/list/', views.as_view),
+    path('recipie/<int:id>/', views.recipe_details),
 
     # path('recipe/add/', views.app_add_recipe),
     path('recipe/modify/<int:id>/', views.app_edit_recipe),
